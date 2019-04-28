@@ -10,8 +10,8 @@ class Spirolateral():
         self.turtleObject.hideturtle()
         self.ghostTurtle = turtle.Turtle()
         self.ghostTurtle.hideturtle()
-        self.ghostTurtle.speed(-1)
-        self.turtleObject.speed(-1)
+        self.ghostTurtle.speed(0)
+        self.turtleObject.speed(0)
         self.centerPos = centerPos
         self.scale = scale
         self.dRootList = self.genDrootList()
@@ -54,13 +54,35 @@ class Spirolateral():
             currentPosx, currentPosy = turtleObject.pos()
             currentPosx = round(currentPosx, 3)
             currentPosy = round(currentPosy, 3)
+            print(currentPosx, currentPosy)
+
+            xLocationList.append(currentPosx)
+            yLocationList.append(currentPosy)
 
             xLocationList.append(currentPosx)
             if currentPosx == startPos[0] and currentPosy == startPos[1]:
                 print("NANI?")
                 break
 
+        return xLocationList, yLocationList
+
+    def drawCenteredSpiro(self):
+        turtle.tracer(False)
+        xLocationList, yLocationList = self.drawBasicSpiro(self.ghostTurtle, self.centerPos, False)
+        turtle.tracer(True)
+        minXvalue, maxXvalue = (min(xLocationList), max(xLocationList))
+        minYvalue, maxYvalue = (min(yLocationList), max(yLocationList))
+
+        newStartX = round(self.centerPos[0] - (((minXvalue - self.centerPos[0]) + (maxXvalue - self.centerPos[0])) / 2), 3)
+        newStartY = round(self.centerPos[1] - (((minYvalue - self.centerPos[1]) + (maxYvalue - self.centerPos[1])) / 2), 3)
+        turtle.tracer(False)
+        self.drawBasicSpiro(self.turtleObject, (newStartX, newStartY), True)
+        turtle.tracer(True)
+
+
+
+
 if __name__ == "__main__":
-    sc = Spirolateral("spiro1", 7, 90, "xyz", (0,0), 10)
-    sc.drawBasicSpiro(sc.turtleObject, sc.centerPos, True)
-    time.sleep(9999)
+    sc = Spirolateral("spiro1", 8, 90, "xyz", (10,10) , 10)
+    sc.drawCenteredSpiro()
+    time.sleep(1)
