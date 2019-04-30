@@ -2,13 +2,14 @@ import turtle
 import time
 
 class Spirolateral():
-    def __init__(self, name, timeTable, angle, screen, centerPos, scale):
+    def __init__(self, name, timeTable, angle, canvas, centerPos, scale):
+        self.canvas = canvas
         self.name = str(name)
         self.timeTable = int(timeTable)
         self.angle = int(angle)
-        self.turtleObject = turtle.Turtle()
+        self.turtleObject = turtle.RawTurtle(self.canvas)
         self.turtleObject.hideturtle()
-        self.ghostTurtle = turtle.Turtle()
+        self.ghostTurtle = turtle.RawTurtle(self.canvas)
         self.ghostTurtle.hideturtle()
         self.ghostTurtle.speed(0)
         self.turtleObject.speed(0)
@@ -16,7 +17,7 @@ class Spirolateral():
         self.scale = scale
         self.dRootList = self.genDrootList()
 
-        self.centerTurtle = turtle.Turtle()
+        self.centerTurtle = turtle.RawTurtle(self.canvas)
         self.centerTurtle.shape("circle")
         self.centerTurtle.penup()
         self.centerTurtle.goto(self.centerPos)
@@ -67,22 +68,22 @@ class Spirolateral():
         return xLocationList, yLocationList
 
     def drawCenteredSpiro(self):
-        turtle.tracer(False)
+        self.turtleObject.tracer(False)
         xLocationList, yLocationList = self.drawBasicSpiro(self.ghostTurtle, self.centerPos, False)
-        turtle.tracer(True)
+        #turtle.tracer(True)
         minXvalue, maxXvalue = (min(xLocationList), max(xLocationList))
         minYvalue, maxYvalue = (min(yLocationList), max(yLocationList))
 
         newStartX = round(self.centerPos[0] - (((minXvalue - self.centerPos[0]) + (maxXvalue - self.centerPos[0])) / 2), 3)
         newStartY = round(self.centerPos[1] - (((minYvalue - self.centerPos[1]) + (maxYvalue - self.centerPos[1])) / 2), 3)
-        turtle.tracer(False)
+        #turtle.tracer(False)
         self.drawBasicSpiro(self.turtleObject, (newStartX, newStartY), True)
-        turtle.tracer(True)
+        #turtle.tracer(True)
 
 
 
 
-if __name__ == "__main__":
-    sc = Spirolateral("spiro1", 8, 90, "xyz", (10,10) , 10)
-    sc.drawCenteredSpiro()
-    time.sleep(1)
+#if __name__ == "__main__":
+#    sc = Spirolateral("spiro1", 8, 90, "", (10,10) , 10)
+#    sc.drawCenteredSpiro()
+#    time.sleep(1)
