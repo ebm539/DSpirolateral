@@ -1,4 +1,6 @@
-import otherSpiroClass_v4 as spiroModule
+##Decided to seperate the spirolateral object from the parts that controlled the drawing of the spirolateral
+
+import otherSpiroClass_v5 as spiroModule
 import tkinter as tk
 import time
 import turtle
@@ -11,11 +13,11 @@ btn1.grid()
 
 screen = turtle.TurtleScreen(canvas)
 
-sc = spiroModule.Spirolateral("spiro1", 24, 45, screen, (25, -25), 10)
-sc.drawCenteredSpiro()
+scd = spiroModule.SpirolateralDrawer(screen, 10)
+sc = spiroModule.Spirolateral(7, 45)
+scd.loadSpiro(sc)
+
 time.sleep(2)
-sc.clearScreen()
-sc.timeTable = 7
-sc.angle = 36
-sc.drawCenteredSpiro()
+sc2 = spiroModule.Spirolateral(13, 26)
+scd.loadSpiro(sc2)
 root.mainloop()
