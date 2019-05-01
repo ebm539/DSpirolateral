@@ -1,6 +1,6 @@
 ##Decided to seperate the spirolateral object from the parts that controlled the drawing of the spirolateral
 
-import otherSpiroClass_v5 as spiroModule
+import otherSpiroClass as spiroModule
 import tkinter as tk
 import time
 import turtle
@@ -21,3 +21,4 @@ time.sleep(2)
 sc2 = spiroModule.Spirolateral(13, 26)
 scd.loadSpiro(sc2)
 root.mainloop()
+6
