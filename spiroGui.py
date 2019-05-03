@@ -37,13 +37,23 @@ class SpiroGui():
         self.deleteButton.grid(row=0, column=1)
 
         self.prevCancelButton = tk.Button(self.controlFrame, text="<- Prev", command=self.previousSpiro)
-        self.prevCancelButton.grid(row=2, column=0)
+        self.prevCancelButton.grid(row=2, column=0, rowspan=2)
 
-        self.entryFrame = tk.Frame(self.controlFrame)
-        self.entryFrame.pack(row=2, column=1)
+        self.testLabel1 = tk.Label(self.controlFrame, text="test1")
+        self.testLabel1.grid(row=2, column=1)
+
+        self.testEntry1 = tk.Entry(self.controlFrame)
+        self.testEntry1.grid(row=2, column=2)
+
+        self.testLabel2 = tk.Label(self.controlFrame, text="test2")
+        self.testLabel2.grid(row=3, column=1)
+
+        self.testEntry2 = tk.Entry(self.controlFrame)
+        self.testEntry2.grid(row=3, column=2)
+
 
         self.nextConfirmButton = tk.Button(self.controlFrame, text="Next ->", command=self.nextSpiro)
-        self.nextConfirmButton.grid(row=2, column=2)
+        self.nextConfirmButton.grid(row=2, column=3, rowspan=2)
 
         self.spiroDrawer = spiroModule.SpirolateralDrawer(self.turtleScreen, 10)
 
@@ -61,7 +71,7 @@ class SpiroGui():
 
 
     def addNewSpirolateral(self):
-        print("Spiro added ;)")
+        
         self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
         self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
 
