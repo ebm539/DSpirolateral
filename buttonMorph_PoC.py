@@ -5,16 +5,26 @@ import Tkinter as tk
 import time
 import turtle
 
+global command
 
 root = tk.Tk()
 
 spiroList = []
 
+def command1():
+    print("Command 1")
+    command.configure(text="Command2", command=command2)
+
+def command2():
+    print("Command 2")
+    command.configure(text="Command1", command=command1)
+
 def buildGui():
+    global command
     optionFrame = tk.Frame()
     optionFrame.grid(row=1)
-    addButton = tk.Button(optionFrame, text="Add new...")
-    addButton.grid(row=0, column=0)
+    command = tk.Button(optionFrame, text="Command1", command=command1)
+    command.grid(row=0, column=0)
     deleteButton = tk.Button(optionFrame, text="Delete")
     deleteButton.grid(row=0, column=1)
 
