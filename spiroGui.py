@@ -31,7 +31,7 @@ class SpiroGui():
         self.controlFrame = tk.Frame(self.root)
         self.controlFrame.grid(row=2)
 
-        self.addButton = tk.Button(self.optionFrame, text="Add new...", command=self.addNewDialog)
+        self.addButton = tk.Button(self.optionFrame, text="Add new...", command=self.addSpiroState)
         self.addButton.grid(row=0, column=0)
 
         self.deleteButton = tk.Button(self.optionFrame, text="Delete")
@@ -74,33 +74,55 @@ class SpiroGui():
 
         self.root.mainloop()
 
-    def previousSpiro(self):
-        self.currentSpiroIndex -= 1
+    def normalState(self):
+        #Wrap around index
         if self.currentSpiroIndex < 0:
             self.currentSpiroIndex += len(self.spiroList)
-        print("Current spiro: ", self.currentSpiroIndex + 1)
-        self.spiroDrawer.loadSpiro(self.spiroList[self.currentSpiroIndex])
-        self.currentSpiroNameText.set(self.spiroList[self.currentSpiroIndex].name)
-        self.currentSpiroMultipleText.set(self.spiroList[self.currentSpiroIndex].timeTable)
-        print("Prev")
-
-    def nextSpiro(self):
-        self.currentSpiroIndex += 1
         if self.currentSpiroIndex >= len(self.spiroList):
             self.currentSpiroIndex -= len(self.spiroList)
-        print("Current spiro: ", self.currentSpiroIndex + 1)
-        self.spiroDrawer.loadSpiro(self.spiroList[self.currentSpiroIndex])
-        self.currentSpiroNameText.set(self.spiroList[self.currentSpiroIndex].name)
-        self.currentSpiroMultipleText.set(self.spiroList[self.currentSpiroIndex].timeTable)
-        print("Next")
 
-    def addNewDialog(self):
+        currentSpiro = self.spiroList[self.currentSpiroIndex]
+
+        #Load currently selected spiro into the drawer
+        self.spiroDrawer.loadSpiro(currentSpiro)
+
+        #Configure the text and state for the entry fields
+        self.currentSpiroNameText.set(currentSpiro.name)
+        self.currentSpiroMultipleText.set(currentSpiro.timeTable)
+
+        self.currentSpiroNameEntry.configure(state="readonly")
+        self.currentSpiroMultipleEntry.configure(state="readonly")
+
+        #Configure the control buttons to make sure they have the right text on them
+        self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
+        self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
+        self.addButton.configure(relief=tk.RAISED)
+
+    def addSpiroState(self):
         self.prevCancelButton.configure(text="Cancel", command=self.addCancel)
         self.nextConfirmButton.configure(text="Confirm", command=self.addNewSpirolateral)
         self.addButton.configure(relief=tk.SUNKEN)
 
         self.currentSpiroNameEntry.configure(state="normal")
         self.currentSpiroNameText.set("")
+
+        self.currentSpiroMultipleEntry.configure(state="normal")
+        self.currentSpiroMultipleText.set("")
+
+
+
+    def previousSpiro(self):
+        self.currentSpiroIndex -= 1
+        print("Current spiro: ", self.currentSpiroIndex + 1)
+        print("Prev")
+        self.normalState()
+
+    def nextSpiro(self):
+        self.currentSpiroIndex += 1
+        print("Current spiro: ", self.currentSpiroIndex + 1)
+        print("Next")
+        self.normalState()
+
 
 
     def addNewSpirolateral(self):
@@ -110,9 +132,7 @@ class SpiroGui():
 
     def addCancel(self):
         print("Canceling spiro addition")
-        self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
-        self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
-        self.addButton.configure(relief=tk.RAISED)
+        self.normalState()
 
 #sc = spiroModule.Spirolateral(7, 45)
 #scd.loadSpiro(sc)
