@@ -126,9 +126,8 @@ class SpiroGui():
 
 
     def addNewSpirolateral(self):
-        self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
-        self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
-        self.addButton.configure(relief=tk.RAISED)
+        self.normalState()
+        print("Spiro added ;)")
 
     def addCancel(self):
         print("Canceling spiro addition")
