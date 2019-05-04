@@ -17,7 +17,8 @@ import turtle
 class SpiroGui():
     def __init__(self):
         self.root = tk.Tk()
-        self.spiroList = [1,2,3,4,5]
+        self.spiroList = []
+        self.currentSpiroIndex = 0
 
         self.optionFrame = tk.Frame(self.root)
         self.optionFrame.grid(row=0)
@@ -39,17 +40,20 @@ class SpiroGui():
         self.prevCancelButton = tk.Button(self.controlFrame, text="<- Prev", command=self.previousSpiro)
         self.prevCancelButton.grid(row=2, column=0, rowspan=2)
 
-        self.testLabel1 = tk.Label(self.controlFrame, text="test1")
-        self.testLabel1.grid(row=2, column=1)
+        self.currentSpiroNameLabel = tk.Label(self.controlFrame, text="Name: ")
+        self.currentSpiroNameLabel.grid(row=2, column=1, sticky=tk.W)
 
-        self.testEntry1 = tk.Entry(self.controlFrame)
-        self.testEntry1.grid(row=2, column=2)
+        self.strVar1 = tk.StringVar()
+        self.strVar1.set("Blah")
 
-        self.testLabel2 = tk.Label(self.controlFrame, text="test2")
-        self.testLabel2.grid(row=3, column=1)
+        self.currentSpiroNameEntry = tk.Entry(self.controlFrame, state=tk.DISABLED)
+        self.currentSpiroNameEntry.grid(row=2, column=2)
 
-        self.testEntry2 = tk.Entry(self.controlFrame)
-        self.testEntry2.grid(row=3, column=2)
+        self.currentSpiroMultipleLabel = tk.Label(self.controlFrame, text="Multiple: ")
+        self.currentSpiroMultipleLabel.grid(row=3, column=1, sticky=tk.W)
+
+        self.currentSpiroMultipleEntry = tk.Entry(self.controlFrame)
+        self.currentSpiroMultipleEntry.grid(row=3, column=2)
 
 
         self.nextConfirmButton = tk.Button(self.controlFrame, text="Next ->", command=self.nextSpiro)
@@ -57,11 +61,29 @@ class SpiroGui():
 
         self.spiroDrawer = spiroModule.SpirolateralDrawer(self.turtleScreen, 10)
 
+        self.spiroList.append(spiroModule.Spirolateral(5, 90))
+        self.spiroList.append(spiroModule.Spirolateral(7, 90))
+        self.spiroList.append(spiroModule.Spirolateral(42, 90))
+        self.spiroList.append(spiroModule.Spirolateral(100, 90))
+        self.spiroList.append(spiroModule.Spirolateral(10, 90))
+
+        self.spiroDrawer.loadSpiro(self.spiroList[0])
+
         self.root.mainloop()
 
     def previousSpiro(self):
+        self.currentSpiroIndex -= 1
+        if self.currentSpiroIndex < 0:
+            self.currentSpiroIndex += len(self.spiroList)
+        print("Current spiro: ", self.currentSpiroIndex + 1)
+        self.spiroDrawer.loadSpiro(self.spiroList[self.currentSpiroIndex])
         print("Prev")
     def nextSpiro(self):
+        self.currentSpiroIndex += 1
+        if self.currentSpiroIndex >= len(self.spiroList):
+            self.currentSpiroIndex -= len(self.spiroList)
+        print("Current spiro: ", self.currentSpiroIndex + 1)
+        self.spiroDrawer.loadSpiro(self.spiroList[self.currentSpiroIndex])
         print("Next")
 
     def addNewDialog(self):
@@ -71,7 +93,6 @@ class SpiroGui():
 
 
     def addNewSpirolateral(self):
-        
         self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
         self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
 
