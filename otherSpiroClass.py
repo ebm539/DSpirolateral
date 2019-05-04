@@ -65,7 +65,8 @@ class SpirolateralDrawer():
         pass
 
 class Spirolateral():
-    def __init__(self, timeTable, angle):
+    def __init__(self, name, timeTable, angle):
+        self.name = name
         self.timeTable = timeTable
         self.angle = angle
         self.dRootList = self.genDrootList(self.timeTable)

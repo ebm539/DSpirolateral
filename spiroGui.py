@@ -43,16 +43,17 @@ class SpiroGui():
         self.currentSpiroNameLabel = tk.Label(self.controlFrame, text="Name: ")
         self.currentSpiroNameLabel.grid(row=2, column=1, sticky=tk.W)
 
-        self.strVar1 = tk.StringVar()
-        self.strVar1.set("Blah")
+        self.currentSpiroNameText = tk.StringVar()
 
-        self.currentSpiroNameEntry = tk.Entry(self.controlFrame, state=tk.DISABLED)
+        self.currentSpiroNameEntry = tk.Entry(self.controlFrame, state="readonly", textvariable=self.currentSpiroNameText)
         self.currentSpiroNameEntry.grid(row=2, column=2)
 
         self.currentSpiroMultipleLabel = tk.Label(self.controlFrame, text="Multiple: ")
         self.currentSpiroMultipleLabel.grid(row=3, column=1, sticky=tk.W)
 
-        self.currentSpiroMultipleEntry = tk.Entry(self.controlFrame)
+        self.currentSpiroMultipleText = tk.StringVar()
+
+        self.currentSpiroMultipleEntry = tk.Entry(self.controlFrame, state="readonly", textvariable=self.currentSpiroMultipleText)
         self.currentSpiroMultipleEntry.grid(row=3, column=2)
 
 
@@ -61,13 +62,15 @@ class SpiroGui():
 
         self.spiroDrawer = spiroModule.SpirolateralDrawer(self.turtleScreen, 10)
 
-        self.spiroList.append(spiroModule.Spirolateral(5, 90))
-        self.spiroList.append(spiroModule.Spirolateral(7, 90))
-        self.spiroList.append(spiroModule.Spirolateral(42, 90))
-        self.spiroList.append(spiroModule.Spirolateral(100, 90))
-        self.spiroList.append(spiroModule.Spirolateral(10, 90))
+        self.spiroList.append(spiroModule.Spirolateral("Pandas", 5, 90))
+        self.spiroList.append(spiroModule.Spirolateral("Ferocity", 7, 90))
+        self.spiroList.append(spiroModule.Spirolateral("Highrise", 42, 90))
+        self.spiroList.append(spiroModule.Spirolateral("Velocity", 100, 90))
+        self.spiroList.append(spiroModule.Spirolateral("notPandas", 10, 90))
 
         self.spiroDrawer.loadSpiro(self.spiroList[0])
+        self.currentSpiroNameText.set(self.spiroList[0].name)
+        self.currentSpiroMultipleText.set(self.spiroList[0].timeTable)
 
         self.root.mainloop()
 
@@ -77,13 +80,18 @@ class SpiroGui():
             self.currentSpiroIndex += len(self.spiroList)
         print("Current spiro: ", self.currentSpiroIndex + 1)
         self.spiroDrawer.loadSpiro(self.spiroList[self.currentSpiroIndex])
+        self.currentSpiroNameText.set(self.spiroList[self.currentSpiroIndex].name)
+        self.currentSpiroMultipleText.set(self.spiroList[self.currentSpiroIndex].timeTable)
         print("Prev")
+
     def nextSpiro(self):
         self.currentSpiroIndex += 1
         if self.currentSpiroIndex >= len(self.spiroList):
             self.currentSpiroIndex -= len(self.spiroList)
         print("Current spiro: ", self.currentSpiroIndex + 1)
         self.spiroDrawer.loadSpiro(self.spiroList[self.currentSpiroIndex])
+        self.currentSpiroNameText.set(self.spiroList[self.currentSpiroIndex].name)
+        self.currentSpiroMultipleText.set(self.spiroList[self.currentSpiroIndex].timeTable)
         print("Next")
 
     def addNewDialog(self):
@@ -95,6 +103,7 @@ class SpiroGui():
     def addNewSpirolateral(self):
         self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
         self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
+        self.addButton.configure(relief=tk.RAISED)
 
     def addCancel(self):
         print("Canceling spiro addition")
