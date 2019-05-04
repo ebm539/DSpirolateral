@@ -99,6 +99,9 @@ class SpiroGui():
         self.nextConfirmButton.configure(text="Confirm", command=self.addNewSpirolateral)
         self.addButton.configure(relief=tk.SUNKEN)
 
+        self.currentSpiroNameEntry.configure(state="normal")
+        self.currentSpiroNameText.set("")
+
 
     def addNewSpirolateral(self):
         self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
