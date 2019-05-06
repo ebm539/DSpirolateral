@@ -90,8 +90,8 @@ class SpiroGui():
         self.currentSpiroNameText.set(currentSpiro.name)
         self.currentSpiroMultipleText.set(currentSpiro.timeTable)
 
-        self.currentSpiroNameEntry.configure(state="readonly")
-        self.currentSpiroMultipleEntry.configure(state="readonly")
+        self.currentSpiroNameEntry.configure(state="readonly", textvariable=self.currentSpiroNameText, fg="black")
+        self.currentSpiroMultipleEntry.configure(state="readonly", textvariable=self.currentSpiroMultipleText, fg="black")
 
         #Configure the control buttons to make sure they have the right text on them
         self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)
@@ -103,10 +103,10 @@ class SpiroGui():
         self.nextConfirmButton.configure(text="Confirm", command=self.addNewSpirolateral)
         self.addButton.configure(relief=tk.SUNKEN)
 
-        self.currentSpiroNameEntry.configure(state="normal")
+        self.currentSpiroNameEntry.configure(state="normal", fg="black", textvariable=self.currentSpiroNameText)
         self.currentSpiroNameText.set("")
 
-        self.currentSpiroMultipleEntry.configure(state="normal")
+        self.currentSpiroMultipleEntry.configure(state="normal", fg="black", textvariable=self.currentSpiroMultipleText)
         self.currentSpiroMultipleText.set("")
 
 
@@ -126,12 +126,52 @@ class SpiroGui():
 
 
     def addNewSpirolateral(self):
-        self.normalState()
-        print("Spiro added ;)")
+        invalidEntries = []
+        newSpiroName = self.currentSpiroNameText.get()
+        if not newSpiroName:
+            invalidEntries.append("nullName")
+
+        try:
+            newSpiroMultiple = int(self.currentSpiroMultipleText.get())
+        except ValueError:
+            if self.currentSpiroMultipleText.get():
+                invalidEntries.append("invMultiple")
+            else:
+                invalidEntries.append("nullMultiple")
+
+        if not invalidEntries:
+            self.spiroList.append(spiroModule.Spirolateral(newSpiroName, newSpiroMultiple, 90))
+            self.currentSpiroIndex = len(self.spiroList) - 1
+            self.normalState()
+            print("Spiro added ;)")
+        else:
+            self.errorState(invalidEntries)
 
     def addCancel(self):
         print("Canceling spiro addition")
         self.normalState()
+
+    def errorState(self, invalidEntries):
+        self.currentSpiroNameEntry.configure(state="readonly")
+        self.currentSpiroMultipleEntry.configure(state="readonly")
+
+        if "nullName" in invalidEntries:
+            self.currentSpiroNameEntry.configure(fg="red")
+            self.currentSpiroNameText.set("Name is required")
+
+        if "invMultiple" in invalidEntries:
+            self.currentSpiroMultipleEntry.configure(fg="red")
+            self.currentSpiroMultipleText.set("Must be whole numeral")
+
+        if "nullMultiple" in invalidEntries:
+            self.currentSpiroMultipleEntry.configure(fg="red")
+            self.currentSpiroMultipleText.set("Multiple is required")
+
+
+
+        self.root.after(2000, self.addSpiroState)
+
+
 
 #sc = spiroModule.Spirolateral(7, 45)
 #scd.loadSpiro(sc)
