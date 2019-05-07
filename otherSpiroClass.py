@@ -1,3 +1,4 @@
+#Import the standard turtle and time module
 import turtle
 import time
 
@@ -77,7 +78,7 @@ class Spirolateral():
         while True:
             x += 1
             multiple = x * self.timeTable
-            dRoot = (multiple - 1) % 9 + 1 #if multiple else 0
+            dRoot = (multiple - 1) % 9 + 1 if multiple else 0
             if dRoot in rootList:
                 break
             else:
