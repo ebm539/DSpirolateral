@@ -193,7 +193,7 @@ class SpiroGui():
             #Update the dialog label to tell the user we have no spirolaterals
             self.dialogLabel.configure(text="No spirolaterals saved. Please create a new one.")
         else:
-            #We have spirolateral now
+            #We have a spirolateral loaded now
 
             #Enable the delete button as there are spirolaterals that the user may want to delete
             self.deleteButton.configure(state="normal")
@@ -215,6 +215,9 @@ class SpiroGui():
         #Configure the entry fields so that the user can't write in them and has the correct text color
         self.currentSpiroNameEntry.configure(state="readonly", textvariable=self.currentSpiroNameText, fg="black")
         self.currentSpiroMultipleEntry.configure(state="readonly", textvariable=self.currentSpiroMultipleText, fg="black")
+
+        #Make sure that the Add spirolateral button is available
+        self.addButton.configure(state="normal")
 
         #Configure the control buttons to make sure they have the right text on them
         self.prevCancelButton.configure(text="<- Prev", command=self.previousSpiro)

@@ -110,42 +110,62 @@ class SpirolateralDrawer():
         #And makes the creation of these spirolaterals instant
         self.screen.tracer(False)
 
-        #Draw a ghost spirolateral 
+        #Draw a ghost spirolateral using the spiro object we've been given
         xLocationList, yLocationList = self.__drawBasicSpiro(spiroObject, self.ghostTurtle, self.centerPos, False)
-        print("Length of location list:", len(xLocationList))
+
+        #Calculate the minimum and maximum x and y values in our location list
         minXvalue, maxXvalue = (min(xLocationList), max(xLocationList))
         minYvalue, maxYvalue = (min(yLocationList), max(yLocationList))
 
+        #Generate an averagres for the min x and max x and the min y and max y
+        #These can be subtracted from our current position so we now know where to
+        #State the drawing of the spirolateral for it to be cenetered around self.centerPos
         newStartX = round(self.centerPos[0] - (((minXvalue - self.centerPos[0]) + (maxXvalue - self.centerPos[0])) / 2), 3)
         newStartY = round(self.centerPos[1] - (((minYvalue - self.centerPos[1]) + (maxYvalue - self.centerPos[1])) / 2), 3)
+
+        #Draw the visible spirolateral using thespirolateral object and our corrected start position
         self.__drawBasicSpiro(spiroObject, self.turtleObject, (newStartX, newStartY), True)
+        #Turn on the screen tracer so the user can see what we've drawn
         self.screen.tracer(True)
 
+    #Clear screen method
+    #This clears the turtle screen of any existing spirolaterals
     def clearScreen(self):
-        print("Called clear screen")
         self.turtleObject.clear()
         self.ghostTurtle.clear()
         pass
 
+#spirolateral class:
+#This class erves as a container for the information required to draw a spirolateral
+#It includes the spirolateral name, time table (int) and angle (int/float)
 class Spirolateral():
     def __init__(self, name, timeTable, angle):
-        self.name = name
-        self.timeTable = timeTable
-        self.angle = angle
-        self.dRootList = self.genDrootList(self.timeTable)
+        self.name = name #The name of this spirolateral
+        self.timeTable = timeTable #The timetable number used to draw this spirolateral
+        self.angle = angle #The angle that the turtle object will turn between distances in the drootlist
+        self.dRootList = self.genDrootList(self.timeTable) #Digital root list
 
+    #Gen rootlist:
+    #This method generates a digital root list of the time table
     def genDrootList(self, timeTable):
-        rootList = []
-        x = 0
+        rootList = [] #Create the intermediary root list
+        loop = 0 #Set the number of loops to zero
         while True:
-            x += 1
-            multiple = x * self.timeTable
-            dRoot = (multiple - 1) % 9 + 1 if multiple else 0
+            loop += 1 #Increment the loop number
+            product = loop * self.timeTable #Multiple the loop number to our multiple
+            #Get the digital root of this product.
+            #A digital root is the sum of each individual number of the product
+            #If the sum is 10 or greater the process repeats until we have a single digit number
+            dRoot = (product - 1) % 9 + 1 if product else 0
+            #If the droot is already in our list
             if dRoot in rootList:
+                #We can stop now, the pattern only repeats after this
                 break
             else:
+                #We haven't had this root appear yet, append it to our list
                 rootList.append(dRoot)
-
+        #Return our final digital root list
+        print(rootList)
         return(rootList)
 
 
