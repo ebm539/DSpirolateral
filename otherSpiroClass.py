@@ -165,7 +165,6 @@ class Spirolateral():
                 #We haven't had this root appear yet, append it to our list
                 rootList.append(dRoot)
         #Return our final digital root list
-        print(rootList)
         return(rootList)
 
 
