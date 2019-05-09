@@ -48,6 +48,9 @@ class SpiroGui():
         #Whenever the user closes the application through clicking x, run a method
         #To close the program tidily
         self.root.protocol("WM_DELETE_WINDOW", self.closeApplication)
+
+        self.root.title("Spirolateral GUI")
+
         #Set the applicationOpen attribute to True
         #This serves as a messenger to the main loop whether or not to keep this
         #program running
