@@ -131,7 +131,7 @@ class SpiroGui():
         #and B.) provide a place for the user to input a name for a new spirolateral
         #In scenario A it is disabled as it serves as a label while
         #in scenario B it will be enabled and the user will be able to write in it
-        self.currentSpiroNameEntry = tk.Entry(self.controlFrame, state="readonly", textvariable=self.currentSpiroNameText)
+        self.currentSpiroNameEntry = tk.Entry(self.controlFrame, state="readonly", textvariable=self.currentSpiroNameText, width=25)
         #Pack this in between the two buttons in the option frame next to the Name label
         self.currentSpiroNameEntry.grid(row=1, column=2)
 
@@ -151,7 +151,7 @@ class SpiroGui():
         #and B.) provide a place for the user to input a multiple for a new spirolateral
         #In scenario A it is disabled as it serves as a label while
         #in scenario B it will be enabled and the user will be able to write in it
-        self.currentSpiroMultipleEntry = tk.Entry(self.controlFrame, state="readonly", textvariable=self.currentSpiroMultipleText)
+        self.currentSpiroMultipleEntry = tk.Entry(self.controlFrame, state="readonly", textvariable=self.currentSpiroMultipleText, width=25)
         #Pack this in between the two buttons in the option frame next to the Multiple label
         self.currentSpiroMultipleEntry.grid(row=2, column=2)
 
