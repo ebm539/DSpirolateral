@@ -44,6 +44,14 @@ class SpiroGui():
     #This is called whenever SpiroGui is instantiated and sets up the gui and all it's required variables
     def __init__(self):
         self.root = tk.Tk() #This is the root window of the tkinter application.
+        self.root.resizable(0, 0) #Prevent this window from being resized.
+        #Whenever the user closes the application through clicking x, run a method
+        #To close the program tidily
+        self.root.protocol("WM_DELETE_WINDOW", self.closeApplication)
+        #Set the applicationOpen attribute to True
+        #This serves as a messenger to the main loop whether or not to keep this
+        #program running
+        self.applicationOpen = True
 
         self.spiroList = [] #This list will hold all of our spiroObjects which contain the information on each spirolateral
 
@@ -156,8 +164,9 @@ class SpiroGui():
 
         #Run the normal state function to swap the gui into it's normal state
         self.normalState()
-        #Run the tkinter.root.mainloop to start the infinite loop which controls the gui
-        self.root.mainloop()
+        #Run our main loop to keep the application running
+        self.mainLoop()
+
 
     #normal state function:
     #This is used to set the gui into the "normal" state by configuring the buttons, labels, cetera
@@ -224,6 +233,10 @@ class SpiroGui():
         self.nextConfirmButton.configure(text="Next ->", command=self.nextSpiro)
         self.addButton.configure(relief=tk.RAISED)
 
+        #Move the focus of the application to the root window to take it off the
+        #entry fields
+        self.root.focus()
+
     #Add spiro state:
     #Similar to normal state however configures the gui so the user can create a new spirolateral
     def addSpiroState(self):
@@ -253,6 +266,9 @@ class SpiroGui():
         self.currentSpiroMultipleText.set("")
         self.currentSpiroNameText.set("")
 
+        #Focus the application onto the Name entry field
+        #This is so the user can start typing in a name as soon as they can
+        self.currentSpiroNameEntry.focus()
 
     #PreviousSpiro
     #This program just decrements the currentSprioIndex and runs the normal state
@@ -281,11 +297,16 @@ class SpiroGui():
         #Retrieve the value of the name entry
         newSpiroName = self.currentSpiroNameText.get()
 
-        #If nothing has been entered into the name entry, add this into our list
+        #If nothing has been entered into the name entry, add this into our list of errors
         #Of invalid entries
         if not newSpiroName:
             #Null name is just a code which means that the text for a new name doesn't exist
             invalidEntries.append("nullName")
+        else:
+            #Check if we have a spirolateral already under that name
+            if newSpiroName in [spiro.name for spiro in self.spiroList]:
+                #If we do, add an error to our error list
+                invalidEntries.append("existingName")
 
         try:
             #Retrieve the text inside the multiple entry and try to interpret is as an integer
@@ -338,6 +359,12 @@ class SpiroGui():
             self.currentSpiroNameEntry.configure(fg="red")
             self.currentSpiroNameText.set("Name is required")
 
+        if "existingName" in invalidEntries:
+            #The use has given us a name that already exists
+            #Set the text for the name entry red
+            self.currentSpiroNameEntry.configure(fg="red")
+            self.currentSpiroNameText.set("Name already exists")
+
         if "invMultiple" in invalidEntries:
             #If the user has given us an invalid multiple, print out an error into the multiple entry field
             #Set this text red
@@ -388,6 +415,29 @@ class SpiroGui():
         self.currentSpiroIndex = 0
         #Run the normal state
         self.normalState()
+
+    #This method is run when the user closes the application through the x on the window
+    def closeApplication(self):
+        self.applicationOpen = False
+
+    #This method handles the main loop of the application
+    def mainLoop(self):
+        #While the applicationOpen messenger is true:
+        while self.applicationOpen:
+            #Try to refresh the gui
+            try:
+                self.root.update()
+            #If at any point the user presses CTRL-C in the terminal, instead
+            #Of an error the user is told what's happened
+            except KeyboardInterrupt:
+                print("\nCaught keyboard interrupt in terminal. Quitting...")
+                #Destroy the application so it isn't left frozen on the user's desktop
+                self.root.destroy()
+                #Close the program
+                sys.exit()
+        #We will only run this line when the user click x on the application window
+        print("Thank you for using this program")
+
 
 #Instantiate the above spiro gui object to run the main loop of the program
 spiroGui = SpiroGui()
