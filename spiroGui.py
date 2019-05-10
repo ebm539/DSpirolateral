@@ -274,6 +274,71 @@ class SpiroGui():
         #This is so the user can start typing in a name as soon as they can
         self.currentSpiroNameEntry.focus()
 
+    #Error state:
+    #This function is run whenever we have encountered errors processing the data the user
+    #Has or has not provided to us to create a new spirolateral with
+    def errorState(self, invalidEntries):
+        #Disable the entry fields and the next/confirm buttons
+        #Were going to print out the errors in those entry fields
+        self.currentSpiroNameEntry.configure(state="readonly")
+        self.currentSpiroMultipleEntry.configure(state="readonly")
+        self.nextConfirmButton.configure(state="disabled")
+        self.prevCancelButton.configure(state="disabled")
+
+
+        if "nullName" in invalidEntries:
+            #If the user hasn't given us a name, print out an error into the name entry field
+            #Set this text red
+            self.currentSpiroNameEntry.configure(fg="red")
+            self.currentSpiroNameText.set("Name is required")
+
+        if "existingName" in invalidEntries:
+            #The use has given us a name that already exists
+            #Set the text for the name entry red
+            self.currentSpiroNameEntry.configure(fg="red")
+            self.currentSpiroNameText.set("Name already exists")
+
+        if "invMultiple" in invalidEntries:
+            #If the user has given us an invalid multiple, print out an error into the multiple entry field
+            #Set this text red
+            self.currentSpiroMultipleEntry.configure(fg="red")
+            self.currentSpiroMultipleText.set("Must be whole numeral")
+
+        if "nullMultiple" in invalidEntries:
+            #If the user hasn't given us a new multiple, print out an error into the multiple entry field
+            #Set this text red
+            self.currentSpiroMultipleEntry.configure(fg="red")
+            self.currentSpiroMultipleText.set("Multiple is required")
+
+        if "negMultiple" in invalidEntries:
+            #If the user has given as a multiple that is 0 or less, print out an error into the multiple entry field
+            #Set this text red
+            self.currentSpiroMultipleEntry.configure(fg="red")
+            self.currentSpiroMultipleText.set("Must be more than 0")
+
+
+        #Wait for two seconds before we return the the addSpiroState so that the user has time to read the errors
+        self.root.after(2000, self.addSpiroState)
+
+    #Delete spiro state function:
+    #Set up the gui so that it queries the user if they want to delete the current spirolateral
+    def deleteSpiroState(self):
+        ##Permanately sink the delete button in as this indicates to the user what mode is currently in use
+        self.deleteButton.configure(relief=tk.SUNKEN)
+        #Disable the add button. We want the user to pass through the normal state
+        #In order to get the add state as the normal state resets the gui so that it
+        #operates as expected in the add state
+        self.addButton.configure(state="disabled")
+        #Update the text in the dialog label to ask the user if they are sure to delete the current spirolateral
+        self.dialogLabel.configure(text="Are you sure you want to delete this spirolateral?")
+
+        #Update the next/cofnirm and prev/cancel buttons to have the right text
+        #and the commands that happen when the buttons are pressed
+        #The now yes button will run the deleteSpiro function
+        #The now No button will return the gui to the normal state
+        self.nextConfirmButton.configure(text="  Yes  ", command=self.deleteSpiro)
+        self.prevCancelButton.configure(text="  No  ", command=self.normalState)
+
     #PreviousSpiro
     #This program just decrements the currentSprioIndex and runs the normal state
     #Which will now display the previous spirolateral
@@ -345,70 +410,7 @@ class SpiroGui():
             #To the error state which will inform the user of them
             self.errorState(invalidEntries)
 
-    #Error state:
-    #This function is run whenever we have encountered errors processing the data the user
-    #Has or has not provided to us to create a new spirolateral with
-    def errorState(self, invalidEntries):
-        #Disable the entry fields and the next/confirm buttons
-        #Were going to print out the errors in those entry fields
-        self.currentSpiroNameEntry.configure(state="readonly")
-        self.currentSpiroMultipleEntry.configure(state="readonly")
-        self.nextConfirmButton.configure(state="disabled")
-        self.prevCancelButton.configure(state="disabled")
 
-
-        if "nullName" in invalidEntries:
-            #If the user hasn't given us a name, print out an error into the name entry field
-            #Set this text red
-            self.currentSpiroNameEntry.configure(fg="red")
-            self.currentSpiroNameText.set("Name is required")
-
-        if "existingName" in invalidEntries:
-            #The use has given us a name that already exists
-            #Set the text for the name entry red
-            self.currentSpiroNameEntry.configure(fg="red")
-            self.currentSpiroNameText.set("Name already exists")
-
-        if "invMultiple" in invalidEntries:
-            #If the user has given us an invalid multiple, print out an error into the multiple entry field
-            #Set this text red
-            self.currentSpiroMultipleEntry.configure(fg="red")
-            self.currentSpiroMultipleText.set("Must be whole numeral")
-
-        if "nullMultiple" in invalidEntries:
-            #If the user hasn't given us a new multiple, print out an error into the multiple entry field
-            #Set this text red
-            self.currentSpiroMultipleEntry.configure(fg="red")
-            self.currentSpiroMultipleText.set("Multiple is required")
-
-        if "negMultiple" in invalidEntries:
-            #If the user has given as a multiple that is 0 or less, print out an error into the multiple entry field
-            #Set this text red
-            self.currentSpiroMultipleEntry.configure(fg="red")
-            self.currentSpiroMultipleText.set("Must be more than 0")
-
-
-        #Wait for two seconds before we return the the addSpiroState so that the user has time to read the errors
-        self.root.after(2000, self.addSpiroState)
-
-    #Delete spiro state function:
-    #Set up the gui so that it queries the user if they want to delete the current spirolateral
-    def deleteSpiroState(self):
-        ##Permanately sink the delete button in as this indicates to the user what mode is currently in use
-        self.deleteButton.configure(relief=tk.SUNKEN)
-        #Disable the add button. We want the user to pass through the normal state
-        #In order to get the add state as the normal state resets the gui so that it
-        #operates as expected in the add state
-        self.addButton.configure(state="disabled")
-        #Update the text in the dialog label to ask the user if they are sure to delete the current spirolateral
-        self.dialogLabel.configure(text="Are you sure you want to delete this spirolateral?")
-
-        #Update the next/cofnirm and prev/cancel buttons to have the right text
-        #and the commands that happen when the buttons are pressed
-        #The now yes button will run the deleteSpiro function
-        #The now No button will return the gui to the normal state
-        self.nextConfirmButton.configure(text="  Yes  ", command=self.deleteSpiro)
-        self.prevCancelButton.configure(text="  No  ", command=self.normalState)
 
     #delete spiro function
     def deleteSpiro(self):
