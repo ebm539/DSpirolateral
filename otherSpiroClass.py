@@ -103,7 +103,7 @@ class SpirolateralDrawer():
     #This is the method we call to load in a spiro object and draw it
     #onto the screen
     #spiroObject is the spiro object containing all of the data required to draw the spirolateral
-    def loadSpiro(self, spiroObject):
+    def loadSpiroObject(self, spiroObject):
         #Clean out the screen by running the clearScreen method to prepare the screen for a new spirolateral
         self.clearScreen()
         #Sets the tracer of the screen to false. This is to fully disable the animation of the turtle drawing

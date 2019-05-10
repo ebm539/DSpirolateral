@@ -23,13 +23,14 @@ except ModuleNotFoundError:
 #and will try the linux spelling after
 
 try:
-    #Attempt to import the tkinter library with the windows spelling
-    import Tkinter as tk
+    #Attempt to import the tkinter library with the lowercase spelling. This is the most common spelling.
+    #We check this one first
+    import tkinter as tk
 except ModuleNotFoundError:
 
     try:
         #If this fails, try the linux spelling instead
-        import tkinter as tk
+        import Tkinter as tk
     except ModuleNotFoundError:
         #The tkinter library is not installed. Inform the user in the terminal and quit after 5 seconds
         print("The tkinter library is not installed.")
@@ -214,7 +215,7 @@ class SpiroGui():
             currentSpiro = self.spiroList[self.currentSpiroIndex]
 
             #Load currently selected spiro into the drawer
-            self.spiroDrawer.loadSpiro(currentSpiro)
+            self.spiroDrawer.loadSpiroObject(currentSpiro)
 
             #Configure the text and state for the entry fields and dialog label
             self.dialogLabel.configure(text="Displaying spirolateral {0} of {1}".format(self.currentSpiroIndex + 1, len(self.spiroList)))
