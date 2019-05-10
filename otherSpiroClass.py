@@ -128,6 +128,10 @@ class SpirolateralDrawer():
         #Turn on the screen tracer so the user can see what we've drawn
         self.screen.tracer(True)
 
+    def loadRawValues(self, name, timeTable, angle):
+        tempObject = Spirolateral(name, timeTable, angle)
+        self.loadSpiroObject(tempObject)
+
     #Clear screen method
     #This clears the turtle screen of any existing spirolaterals
     def clearScreen(self):
