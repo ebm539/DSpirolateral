@@ -80,19 +80,19 @@ class SpirolateralDrawer():
                 # Rotate the object right the angle stored in spirolateral
                 turtleObject.right(spiroObject.angle)
 
-            # Record the current location of turtle object using
-            # The builtin pos method
-            currentPosx, currentPosy = turtleObject.pos()
-            # Round the co-ordinates to 3 decimal places. This is to ensure that
-            # when the turtle object returns to it's start pos we can read that as
-            # current pos == start pos. Python has a nasty habit of making 0.9999999999999999999999999999999999999999999999999
-            # not equal to 1
-            currentPosx = round(currentPosx, 3)
-            currentPosy = round(currentPosy, 3)
+                # Record the current location of turtle object using
+                # The builtin pos method
+                currentPosx, currentPosy = turtleObject.pos()
+                # Round the co-ordinates to 3 decimal places. This is to ensure that
+                # when the turtle object returns to it's start pos we can read that as
+                # current pos == start pos. Python has a nasty habit of making 0.9999999999999999999999999999999999999999999999999
+                # not equal to 1
+                currentPosx = round(currentPosx, 3)
+                currentPosy = round(currentPosy, 3)
 
-            # Append this location to our location lists
-            xLocationList.append(currentPosx)
-            yLocationList.append(currentPosy)
+                # Append this location to our location lists
+                xLocationList.append(currentPosx)
+                yLocationList.append(currentPosy)
 
             # If we have reached our start pos
             if currentPosx == startPos[0] and currentPosy == startPos[1]:
@@ -131,12 +131,31 @@ class SpirolateralDrawer():
         # Draw the visible spirolateral using thespirolateral object and our corrected start position
         self.__drawBasicSpiro(spiroObject, self.turtleObject,
                               (newStartX, newStartY), True)
+        
+        # Save the spirolaterals width and height to variables
+        # Using self so they can be accessed outside of this function
+        self.spirolateralWidth = maxXvalue - minXvalue
+        self.spirolateralHeight = maxYvalue - minYvalue
+
         # Turn on the screen tracer so the user can see what we've drawn
         self.screen.tracer(True)
 
     def loadRawValues(self, name, timeTable, angle):
         tempObject = Spirolateral(name, timeTable, angle)
         self.loadSpiroObject(tempObject)
+
+    def bestScale(self):
+        """Get the turtle canvas screensize, work out the scale for
+        the X and Y axis, then return the smallest scale to use
+        multiplied by 0.99 (to deal with rounding errors somewhere else
+        in the code"""
+        screenX, screenY = self.screen.screensize()
+        scaleX = screenX/self.spirolateralWidth
+        scaleY = screenY/self.spirolateralHeight
+        # edges of spirolaterals get clipped, so we scale down
+        # a small percent to deal with these issues
+        # probably rounding errors causing the problem in the first place
+        return (min(scaleX, scaleY)*self.scale) * 0.99
 
     # Clear screen method
     # This clears the turtle screen of any existing spirolaterals
