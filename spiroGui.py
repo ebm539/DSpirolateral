@@ -12,7 +12,7 @@ import turtle
 ## If it doesn't exist, the program will print out an error message and quit after 5 seconds
 try:
     import otherSpiroClass as spiroModule
-except ModuleNotFoundError:
+except ImportError:
     print("The otherSpiroClass.py file was not found in this directory")
     time.sleep(5)
     sys.exit()
@@ -26,12 +26,12 @@ try:
     #Attempt to import the tkinter library with the lowercase spelling. This is the most common spelling.
     #We check this one first
     import tkinter as tk
-except ModuleNotFoundError:
+except ImportError:
 
     try:
         #If this fails, try the linux spelling instead
         import Tkinter as tk
-    except ModuleNotFoundError:
+    except ImportError:
         #The tkinter library is not installed. Inform the user in the terminal and quit after 5 seconds
         print("The tkinter library is not installed.")
         time.sleep(5)
